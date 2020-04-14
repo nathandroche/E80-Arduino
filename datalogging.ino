@@ -1,4 +1,5 @@
-#include <SD_E80.h> // SD Card Reader
+#include <SD_E80.h> // E80 SD Card Library
+// #include <SD.h> //  Standard SD Card Library
 #include <OneWire.h> // Temperature Probe
 #include <DallasTemperature.h> // Temperature Probe
 #include <LiquidCrystal.h> // LCD Screen
@@ -19,7 +20,9 @@ String fileName = "datalog.txt";
 
 // Temperature and Conductivity:
 double probeReading = 0;
+double probeReading_Display = 0;
 String probeString = "Voltage (Arduino Units)";
+String probeString_Display = "Voltage (V)";
 double tempReading = 0;
 String tempString = "Temperature (C)";
 
@@ -74,7 +77,7 @@ void loop() {
 
   lcd.setCursor(10,0); 
   for (int i = 0; i < min(probeString.length(), 6); i++) {
-    lcd.print(probeString[i]);  // "< Conductivity Data >"
+    lcd.print(probeString_Display[i]);  // "< Conductivity Data >" in Volts
     delay(tim);
   }
   
@@ -93,10 +96,11 @@ void loop() {
 
   // Conductivity Measurements:
   probeReading = analogRead(probePin);
-  if(probeReading != 0) {
-    probeReading = 5*1023/probeReading;  
-  }
   probeString = String(probeReading);
+  if(probeReading != 0) {
+    probeReading_Display = 5*probeReading/1023;
+  }
+  probeString_Display = String(probeReading_Display);
 
   // Temperature Measurements: 
   sensors.requestTemperatures(); 
@@ -107,7 +111,7 @@ void loop() {
   
   // Update Serial Monitor:
   Serial.print("Conductivity: ");
-  Serial.print(probeString);
+  Serial.print(probeString);  // Displays Voltage Output in Arduino Units
   Serial.print(", Temperature: ");
   Serial.println(tempString);
   
