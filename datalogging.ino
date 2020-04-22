@@ -1,5 +1,4 @@
-#include <SD_E80.h> // E80 SD Card Library
-// #include <SD.h> //  Standard SD Card Library
+#include <SD.h> //  Standard SD Card Library
 #include <OneWire.h> // Temperature Probe
 #include <DallasTemperature.h> // Temperature Probe
 #include <LiquidCrystal.h> // LCD Screen
@@ -97,9 +96,9 @@ void loop() {
   // Conductivity Measurements:
   probeReading = analogRead(probePin);
   probeString = String(probeReading);
-  if(probeReading != 0) {
-    probeReading_Display = 5*probeReading/1023;
-  }
+  // if(probeReading != 0) {
+  //   probeReading_Display = (probeReading*5.0/1023.0 - 1)/resistorVal;
+  // }
   probeString_Display = String(probeReading_Display);
 
   // Temperature Measurements: 
@@ -124,7 +123,7 @@ void loop() {
   logFile.close();
 
   unsigned long loopTime = millis() - currentTime;
-  unsigned long delayTime = (1000/samplingRate)-loopTime; // samplingRate (samples per second)
+  unsigned long delayTime = 1000; // samplingRate (samples per second)
   // delay(delayTime);  // This generates a hugely large number, so there's probably some value wrapping going on.
                         // TODO: Figure out how to delay to keep a standard sampling rate !!
   }
